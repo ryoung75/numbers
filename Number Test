@@ -1,6 +1,5 @@
 IDENTIFICATION DIVISION.
 PROGRAM-ID. SolutionFile.
-
 DATA DIVISION.
 WORKING-STORAGE SECTION.
 01 INPUT-LINE 	         	PIC X (100).
@@ -8,27 +7,32 @@ WORKING-STORAGE SECTION.
 01 SUB2                         	PIC X
 01 END-0F-INPUT 	PIC X VALUE 'N'.
 01 SWITCH                    	PIC X.
+// Needed to call reverse function
 LINKAGE SECTION.
 01  STR.
       05  CHARS   		PIC S9(5).
 01  RESULT.
       05  CHARS   		PIC S9(5).
-
 PROCEDURE DIVISION.
 MAIN-PROCEDURE.
+// Start main loop to process input rows
 PERFORM UNTIL END-OF-INPUT = ‘Y’
 ACCEPT INPUT-LINE
 IF INPUT-LINE = SPACE
 MOVE ‘Y’ TO END-OF-INPUT
 ELSE
+// Process line with # rows
       MOVE LENGTH OF INPUT-LINE TO SUB
 DISPLAY INPUT-LINE
+// Loop thru the rows until no more
 PERFORM VARYING SUB FROM 1 TO SUB
 ACCEPT INPUT-LINE
 MOVE INPUT-LINE TO CHARS OF STR
 MOVE LENGTH OF INPUT-LINE TO SUB2
+// Accept row and reverse number. Used to check symmetry.
 MOVE FUNCTION REVERSE(STR) TO RESULT.
 PERFORM VARYING FROM 1 TO SUB2
+// Compare characters one by one and if needed, add one to that character 
 IF CHARS OF STR = CHARS OF RESULT
     CONTINUE
 ELSE 
@@ -37,4 +41,5 @@ END-IF
 DISPLAY RESULT
 END-PERFORM 
 END-IF
-END-PERFORM	STOP RUN
+END-PERFORM
+STOP RUN
